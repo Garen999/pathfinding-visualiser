@@ -5,8 +5,8 @@
 using namespace std;
 
 int main() {
-    int x_pos = 0;
-    int y_pos = 0;
+    int current_row = 0;
+    int current_col  = 0;
 
     random_device rd;
     mt19937 gen(rd()); 
@@ -26,20 +26,32 @@ int main() {
     cout << "Entered the Grid\n";
 
     while (true) {
-        cout << "Current Grid Coordinates: (" << x_pos << "," << y_pos << ")\n";
+        cout << "Current Grid Coordinates: (" << current_row << "," << current_col << ")\n";
 
-        if (grid[x_pos][y_pos] == 3) {
+        if (grid[current_row][current_col] == 3) {
             cout << "Escaped the Grid\n";
             return 0;
         }
 
-        if (y_pos + 1 < 10 && (grid[x_pos][y_pos + 1] == 0 || grid[x_pos][y_pos + 1] == 3)) {
-            y_pos++;
-        } else if (x_pos + 1 < 10 && (grid[x_pos + 1][y_pos] == 0 || grid[x_pos + 1][y_pos] == 3)) {
-            x_pos++;
-        } else {
+        vector<pair<int,int>> valid_moves;
+
+        if (current_col+1 < 10 && (grid[current_row][current_col+1] == 0 || grid[current_row][current_col+1] == 3)) {
+            valid_moves.push_back({current_row,current_col+1});
+        }
+        if (current_col-1 > -1 && (grid[current_row][current_col-1] == 0 || grid[current_row][current_col-1] == 3)) {
+            valid_moves.push_back({current_row,current_col-1});
+        }
+        if (current_row+1 < 10 && (grid[current_row+1][current_col] == 0 || grid[current_row+1][current_col] == 3)) {
+            valid_moves.push_back({current_row+1,current_col});
+        }
+        if (current_row-1 > -1 && (grid[current_row-1][current_col] == 0 || grid[current_row-1][current_col] == 3)) {
+            valid_moves.push_back({current_row-1,current_col});
+        }
+        if (valid_moves.empty()) {
             cout << "Trapped in the Grid\n";
-            return 0;
+            return 0    ;
+        } else {
+            //cout << "Valid Moves: " << current_row << "," << current_col << ")\n";
         }
     }
 }
